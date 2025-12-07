@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -52,6 +52,15 @@ async function run() {
     // Get all properties
     app.get("/all-properties", async (req, res) => {
       const result = await propertiesServices.find().toArray();
+      res.send(result);
+    });
+
+    // Get property by id
+    app.get("/properties/:id", async (req, res) => {
+      const { id } = req.params;
+      const result = await propertiesServices.findOne({
+        _id: new ObjectId(id),
+      });
       res.send(result);
     });
 
