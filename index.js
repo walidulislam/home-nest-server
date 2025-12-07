@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
-const { MongoClient, ServerApiVersion} = require("mongodb");
+const { MongoClient, ServerApiVersion } = require("mongodb");
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -23,6 +23,21 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+
+    const db = client.db("property_db");
+    const propertiesServices = db.collection("properties");
+
+    // Add a new property..
+    app.post("/add-properties", async (req, res) => {
+      const data = req.body;
+      const updatedData = {
+        ...data,
+        postedDate: new Date().toISOString(),
+      };
+
+      const result = await propertiesServices.insertOne(updatedData);
+      res.send(result);
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
