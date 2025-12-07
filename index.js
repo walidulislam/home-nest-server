@@ -39,6 +39,22 @@ async function run() {
       res.send(result);
     });
 
+    // Get latest 6 properties
+    app.get("/latest-properties", async (req, res) => {
+      const result = await propertiesServices
+        .find()
+        .sort({ postedDate: "desc" })
+        .limit(6)
+        .toArray();
+      res.send(result);
+    });
+
+    // Get all properties
+    app.get("/all-properties", async (req, res) => {
+      const result = await propertiesServices.find().toArray();
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
