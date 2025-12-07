@@ -73,6 +73,20 @@ async function run() {
       res.send(result);
     });
 
+    // Update property by id
+    app.put("/update-property/:id", async (req, res) => {
+      const { id } = req.params;
+      const data = req.body;
+      const query = { _id: new ObjectId(id) };
+      const updateProperty = {
+        $set: {
+          ...data,
+        },
+      };
+      const result = await propertiesServices.updateOne(query, updateProperty);
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
