@@ -64,6 +64,15 @@ async function run() {
       res.send(result);
     });
 
+    // My properties by email
+    app.get("/my-properties", async (req, res) => {
+      const { email } = req.query;
+      const result = await propertiesServices
+        .find({ userEmail: email })
+        .toArray();
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
