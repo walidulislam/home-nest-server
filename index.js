@@ -26,6 +26,7 @@ async function run() {
 
     const db = client.db("property_db");
     const propertiesServices = db.collection("properties");
+    const ratingsCollection = db.collection("ratings");
 
     // Add a new property..
     app.post("/add-properties", async (req, res) => {
@@ -92,6 +93,13 @@ async function run() {
       const { id } = req.params;
       const query = { _id: new ObjectId(id) };
       const result = await propertiesServices.deleteOne(query);
+      res.send(result);
+    });
+
+    // Add rating
+    app.post("/add-ratings", async (req, res) => {
+      const ratingData = req.body;
+      const result = await ratingsCollection.insertOne(ratingData);
       res.send(result);
     });
 
