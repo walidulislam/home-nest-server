@@ -52,7 +52,18 @@ async function run() {
 
     // Get all properties
     app.get("/all-properties", async (req, res) => {
-      const result = await propertiesServices.find().toArray();
+      const { price } = req.query;
+      const query = {};
+      const sortOption = {};
+      if (price === "price-asc") {
+        sortOption.price = 1;
+      } else if (price === "price-desc") {
+        sortOption.price = -1;
+      }
+      const result = await propertiesServices
+        .find(query)
+        .sort(sortOption)
+        .toArray();
       res.send(result);
     });
 
